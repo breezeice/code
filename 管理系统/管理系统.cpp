@@ -1,4 +1,5 @@
 #include<iostream>
+#include<conio.h>
 #include <fstream>
 
 using namespace std;
@@ -38,8 +39,8 @@ Room room1[50];//用来存放文件里的房间信息
 Guest guest1[50];//用来存放文件里的客人信息 
 int num;
 int size=0;
-int num1;
-int num2;
+int num1;// 从文件读取的房间信息数 
+int num2;// 从文件读取的顾客信息数 
 //信息录入的实现 
 void xinxiluru()
 {
@@ -48,6 +49,7 @@ void xinxiluru()
 	cin >> size;
 	for (int i = 0; i < size; i++)
 	{
+		int count=0;
 		cout<<"房间号-->";
 		cin >> room[i].num;
 		for(int j=0;j<50;j++)
@@ -55,25 +57,28 @@ void xinxiluru()
 			if(room[i].num==room1[j].num)
 			{
 				cout<<room[i].num<<"房间已有，请输入下一个房间"<<endl; 
+				count++;
 				break;
-			}
-			else
-			{
+			}	
+		}
+		if(count==0)
+		{
 		      cout << "房间类型-->";
 		      cin >> room[i].type;
 		      cout << "房间价格-->";
 		      cin >> room[i].price;
 		      cout<<"房间是否有人-->";
 		      cin>>room[i].ifguest;
-	         break;
-			}	
 		}
+		else {
+			i--;
+			size--;
+		} 
 	}
 }
 //入住登记的实现 
 void ruzhudengji()
 {
-	int num1;
     cout<<"欢迎进入入住登记页面"<<endl;
 	cout<<"请输入需要入住的人数：";
 	cin>>num;
@@ -168,7 +173,7 @@ void liulankehuxinxi()
 		cout<<guest1[k].name<<" "<<guest1[k].id<<" "<<guest1[k].sex<<" "<<guest1[k].ruzhum<<" "<<guest1[k].staytime<<endl;
 	}
 }
-//存入text的内容 
+//从text中读取文件里保存的信息 
 void read(Room *room,Guest *guest)
 {
 	int i=0;
@@ -181,12 +186,12 @@ void read(Room *room,Guest *guest)
 	cout<<"打开文件失败!"<<endl;
 	while(!roomfile.eof())
 	{
-		roomfile>>room1[i].num>>room1[i].type>>room1[i].price>>room1[i].ifguest;
+		roomfile>>room[i].num>>room[i].type>>room[i].price>>room[i].ifguest;
 		i++;
 	}
 	while(!guestfile.eof())
 	{
-		guestfile>>guest1[j].num>>guest1[j].price>>guest1[j].name>>guest1[j].id>>guest1[j].sex>>guest1[j].ruzhum>>guest1[j].staytime;
+		guestfile>>guest[j].num>>guest[j].price>>guest[j].name>>guest[j].id>>guest[j].sex>>guest[j].ruzhum>>guest[j].staytime;
 		j++;
 	}
 	num1=i;
@@ -216,13 +221,13 @@ void write(Room *room,Guest *guest)
 	guestfile.open("Guest.txt", std::ios_base::app);
 	if(!guestfile)
 	cout<<"打开文件失败!"<<endl;
-	for(int i=0;i<num1;i++)
+	for(int i=num1,j=0;i<num1+size;i++,j++)
+	{
+		room1[i]=room[j];
+	}
+	for(int i=0;i<num1+size;i++)
 	{
 		roomfile<<room1[i].num<<" "<<room1[i].type<<" "<<room1[i].price<<" "<<room1[i].ifguest<<endl;
-	}
-    for(int i=0;i<size;i++)
-	{
-		roomfile<<room[i].num<<" "<<room[i].type<<" "<<room[i].price<<" "<<room[i].ifguest<<endl;
 	}
     for(int i=0;i<num;i++)
 	{
@@ -280,9 +285,12 @@ int main()
 		default:
 			cout << "输入非法，请重新输入！" << endl<<endl;
 		}
+		delfile();
+		write(room,guest);
+		getch(); 
+		system("cls") ;
 	} while (choose);
-	delfile();
-	write(room,guest);
+	
 	system("pause");
 	return 0;
 }
