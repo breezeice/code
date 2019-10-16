@@ -1,0 +1,5 @@
+﻿  练习.c
+c:\users\crystal\source\repos\堆\堆\练习.c(63): warning C4013: “malloc”未定义；假设外部返回 int
+c:\users\crystal\source\repos\堆\堆\练习.c(98): warning C4013: “free”未定义；假设外部返回 int
+c:\users\crystal\source\repos\堆\堆\练习.c(118): warning C4013: “system”未定义；假设外部返回 int
+  堆.vcxproj -> C:\Users\crystal\source\repos\堆\Debug\堆.exe
